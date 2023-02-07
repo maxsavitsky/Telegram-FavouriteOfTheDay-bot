@@ -18,13 +18,24 @@ public class UserInfoRetriever {
 	private static final HttpClient httpClient = HttpClient.newBuilder().build();
 
 	public static UserInfo retrieve(long userId, long chatId) throws IOException, InterruptedException {
+		return retrieve(userId, chatId, false);
+	}
+
+	public static UserInfo retrieve(long userId, long chatId, boolean isChatAdministratorsCalled) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("https://api.telegram.org/bot" + TelegramBot.getToken() + "/getChatMember?chat_id=" + chatId + "&user_id=" + userId))
 				.build();
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		if(response.statusCode() != 200){
 			logger.error(response.body());
-			return null;
+			if(isChatAdministratorsCalled)
+				return null;
+			logger.info("Trying to get chat administrators and then get user info");
+			request = HttpRequest.newBuilder()
+					.uri(URI.create("https://api.telegram.org/bot" + TelegramBot.getToken() + "/getChatAdministrators?chat_id=" + chatId))
+					.build();
+			httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+			return retrieve(userId, chatId, true);
 		}
 		String body = response.body();
 		JSONObject jsonObject = new JSONObject(body);
