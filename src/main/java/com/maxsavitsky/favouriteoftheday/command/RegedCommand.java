@@ -2,6 +2,8 @@ package com.maxsavitsky.favouriteoftheday.command;
 
 import com.maxsavitsky.favouriteoftheday.DatabaseManager;
 import com.maxsavteam.ciconia.annotation.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -12,6 +14,8 @@ import java.sql.SQLException;
 
 @Component
 public class RegedCommand extends BaseBotCommand {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegedCommand.class);
 
 	private final DatabaseManager databaseManager;
 
@@ -35,8 +39,7 @@ public class RegedCommand extends BaseBotCommand {
 				}
 			}
 		} catch (SQLException | TelegramApiException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			LOGGER.error("", e);
 		}
 	}
 }

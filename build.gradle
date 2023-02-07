@@ -31,6 +31,9 @@ tasks.withType(JavaCompile) {
 dependencies {
     implementation "com.maxsavteam.ciconia:ciconia:1.0.0-beta3"
 
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    implementation 'ch.qos.logback:logback-classic:1.4.5'
+
     // https://mvnrepository.com/artifact/org.telegram/telegrambots
     implementation 'org.telegram:telegrambots:6.4.0'
     // https://mvnrepository.com/artifact/org.telegram/telegrambots-meta

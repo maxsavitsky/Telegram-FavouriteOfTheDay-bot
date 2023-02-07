@@ -3,6 +3,8 @@ package com.maxsavitsky.favouriteoftheday.command;
 import com.maxsavitsky.favouriteoftheday.DatabaseManager;
 import com.maxsavitsky.favouriteoftheday.UserInfoRetriever;
 import com.maxsavteam.ciconia.annotation.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -14,6 +16,8 @@ import java.sql.SQLException;
 
 @Component
 public class StatsCommand extends BaseBotCommand {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(StatsCommand.class);
 
 	private final DatabaseManager databaseManager;
 
@@ -35,6 +39,7 @@ public class StatsCommand extends BaseBotCommand {
 				int i = 1;
 				while(resultSet.next()){
 					long userId = resultSet.getLong("user_id");
+					LOGGER.info("{}", userId);
 					UserInfoRetriever.UserInfo userInfo = UserInfoRetriever.retrieve(userId, message.getChatId());
 					if(userInfo == null){
 						sendTextMessage("Что-то пошло не так (error getting user " + userId + ")", message.getChatId(), absSender);
@@ -47,12 +52,11 @@ public class StatsCommand extends BaseBotCommand {
 				}
 				sendTextMessage(sb.toString(), message.getChatId(), absSender);
 			} catch (SQLException | IOException | InterruptedException e) {
-				e.printStackTrace();
+				LOGGER.error("", e);
 				sendTextMessage("Что-то пошло не так", message.getChatId(), absSender);
 			}
 		}catch (TelegramApiException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			LOGGER.error("", e);
 		}
 	}
 }

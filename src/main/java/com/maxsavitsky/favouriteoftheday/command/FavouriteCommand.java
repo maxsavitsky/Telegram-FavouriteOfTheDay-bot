@@ -1,19 +1,15 @@
 package com.maxsavitsky.favouriteoftheday.command;
 
 import com.maxsavitsky.favouriteoftheday.DatabaseManager;
-import com.maxsavitsky.favouriteoftheday.TelegramBot;
 import com.maxsavitsky.favouriteoftheday.UserInfoRetriever;
 import com.maxsavteam.ciconia.annotation.Component;
-import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +21,7 @@ import java.util.TimeZone;
 @Component
 public class FavouriteCommand extends BaseBotCommand {
 
-	private static final HttpClient httpClient = HttpClient.newHttpClient();
+	private static final Logger LOGGER = LoggerFactory.getLogger(FavouriteCommand.class);
 
 	private final Map<Long, Boolean> currentlyRunningMap = new HashMap<>();
 
@@ -38,7 +34,6 @@ public class FavouriteCommand extends BaseBotCommand {
 
 	@Override
 	public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-		System.out.println("FavouriteCommand.processMessage");
 		if(currentlyRunningMap.getOrDefault(message.getChatId(), false)){
 			return;
 		}
@@ -51,7 +46,7 @@ public class FavouriteCommand extends BaseBotCommand {
 				printFavourite(resultSet.getLong("user_id"), message.getChatId(), absSender);
 			}
 		}catch (SQLException | TelegramApiException | IOException | InterruptedException e){
-			e.printStackTrace();
+			LOGGER.error("Error while processing favourite command", e);
 		}
 	}
 
@@ -111,19 +106,20 @@ public class FavouriteCommand extends BaseBotCommand {
 					BaseBotCommand.sendTextMessage(s, message.getChatId(), absSender);
 					Thread.sleep(2000);
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error("Error while sending message", e);
 				}
 			}
 			try {
 				printFavourite(userId, message.getChatId(), absSender);
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("Error while printing favourite", e);
 			}
 			currentlyRunningMap.remove(message.getChatId());
 		}).start();
 	}
 
 	public static void printFavourite(long userId, long chatId, AbsSender absSender) throws IOException, InterruptedException, TelegramApiException {
+		LOGGER.info("Printing favourite for user {} in chat {}", userId, chatId);
 		UserInfoRetriever.UserInfo userInfo = UserInfoRetriever.retrieve(userId, chatId);
 		if(userInfo == null){
 			BaseBotCommand.sendTextMessage("Не удалось получить информацию о пользователе", chatId, absSender);

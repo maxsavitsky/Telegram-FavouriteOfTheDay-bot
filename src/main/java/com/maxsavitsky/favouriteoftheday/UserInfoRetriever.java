@@ -2,6 +2,8 @@ package com.maxsavitsky.favouriteoftheday;
 
 import com.maxsavitsky.favouriteoftheday.command.BaseBotCommand;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,6 +13,8 @@ import java.net.http.HttpResponse;
 
 public class UserInfoRetriever {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserInfoRetriever.class);
+
 	private static final HttpClient httpClient = HttpClient.newBuilder().build();
 
 	public static UserInfo retrieve(long userId, long chatId) throws IOException, InterruptedException {
@@ -19,6 +23,7 @@ public class UserInfoRetriever {
 				.build();
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		if(response.statusCode() != 200){
+			logger.error(response.body());
 			return null;
 		}
 		String body = response.body();
