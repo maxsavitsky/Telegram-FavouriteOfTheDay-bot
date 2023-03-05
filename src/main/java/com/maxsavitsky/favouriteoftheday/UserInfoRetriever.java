@@ -23,7 +23,6 @@ public class UserInfoRetriever {
 
 	public static UserInfo retrieve(long userId, long chatId, boolean isChatAdministratorsCalled) throws IOException, InterruptedException {
 		String url = "https://api.telegram.org/bot" + TelegramBot.getToken() + "/getChatMember?chat_id=" + chatId + "&user_id=" + userId;
-		LOGGER.info(url);
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(url))
 				.build();
@@ -43,7 +42,6 @@ public class UserInfoRetriever {
 
 	private static UserInfo retrieveFromAdministrators(long userId, long chatId) throws IOException, InterruptedException {
 		String url = "https://api.telegram.org/bot" + TelegramBot.getToken() + "/getChatAdministrators?chat_id=" + chatId;
-		LOGGER.info(url);
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(url))
 				.build();
