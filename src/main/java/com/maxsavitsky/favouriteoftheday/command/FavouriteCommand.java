@@ -67,8 +67,8 @@ public class FavouriteCommand extends BaseBotCommand {
 		LOGGER.info("Selecting favourite in chat {}", message.getChatId());
 
 		long userId;
-		double probability = new Random().nextDouble();
-		if(message.getChatId() != -1001780707557L || probability < 0.9) {
+		/*double probability = new Random().nextDouble();
+		if(message.getChatId() != -1001780707557L || probability < 0.9) {*/
 			try (PreparedStatement statement = databaseManager.prepareStatement(
 					"SELECT user_id FROM users WHERE chat_id = ? ORDER BY RAND() LIMIT 1"
 			)) {
@@ -80,10 +80,10 @@ public class FavouriteCommand extends BaseBotCommand {
 				}
 				userId = resultSet.getLong("user_id");
 			}
-		}else{
+		/*}else{
 			LOGGER.info("Vita with probability {}))))", probability);
 			userId = 817160881;
-		}
+		}*/
 
 		try(PreparedStatement statement = databaseManager.prepareStatement(
 				"REPLACE INTO current_xuesos (chat_id, user_id) VALUES (?, ?)"
