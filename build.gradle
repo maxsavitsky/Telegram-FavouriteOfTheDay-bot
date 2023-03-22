@@ -35,11 +35,11 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.5'
 
     // https://mvnrepository.com/artifact/org.telegram/telegrambots
-    implementation 'org.telegram:telegrambots:6.4.0'
+    implementation 'org.telegram:telegrambots:6.5.0'
     // https://mvnrepository.com/artifact/org.telegram/telegrambots-meta
-    implementation 'org.telegram:telegrambots-meta:6.4.0'
+    implementation 'org.telegram:telegrambots-meta:6.5.0'
 
-    implementation 'org.telegram:telegrambotsextensions:6.4.0'
+    implementation 'org.telegram:telegrambotsextensions:6.5.0'
 
     // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
     implementation 'com.mysql:mysql-connector-j:8.0.32'

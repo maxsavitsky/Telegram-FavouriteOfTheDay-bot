@@ -3,7 +3,6 @@ package com.maxsavitsky.favouriteoftheday;
 import com.maxsavitsky.favouriteoftheday.command.BaseBotCommand;
 import com.maxsavteam.ciconia.annotation.Component;
 import com.maxsavteam.ciconia.annotation.Implicit;
-import org.checkerframework.checker.compilermsgs.qual.CompilerMessageKey;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
