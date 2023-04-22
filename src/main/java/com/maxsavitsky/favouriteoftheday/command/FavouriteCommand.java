@@ -134,7 +134,7 @@ public class FavouriteCommand extends BaseBotCommand {
 			BaseBotCommand.sendTextMessage("Не удалось получить информацию о пользователе", chatId, absSender);
 			return;
 		}
-		String mention = userInfo.name();
+		String mention = StatsCommand.escapeMarkdown(userInfo.name());
 		if(userInfo.username() != null){
 			mention += " ([@%s](tg://user?id=%d))".formatted(userInfo.username(), userId);
 		}

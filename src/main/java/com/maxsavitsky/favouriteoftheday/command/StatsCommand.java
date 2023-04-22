@@ -44,7 +44,7 @@ public class StatsCommand extends BaseBotCommand {
 					if(userInfo == null){
 						sendTextMessage("Что-то пошло не так (error getting user " + userId + ")", message.getChatId(), absSender);
 					}else{
-						sb.append(i++).append(") ").append(userInfo.name());
+						sb.append(i++).append(") ").append(escapeMarkdown(userInfo.name()));
 						if(userInfo.username() != null)
 							sb.append(" ([@%s](tg://user?id=%d))".formatted(userInfo.username(), userId));
 						sb.append(" - ").append(resultSet.getInt("xuesos_count")).append(" раз(а)\n");
@@ -59,4 +59,11 @@ public class StatsCommand extends BaseBotCommand {
 			LOGGER.error("", e);
 		}
 	}
+
+	public static String escapeMarkdown(String s){
+		String escaped = s.replace("_", "\\_").replace("*", "\\*");
+		LOGGER.info(s + " -> " + escaped);
+		return escaped;
+	}
+
 }
